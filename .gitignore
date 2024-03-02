@@ -1,0 +1,62 @@
+# Visual Studio specific files
+*.suo
+*.user
+*.sln1
+*.vbproj
+*.csproj
+*.vbproj.user
+*.csproj.user
+*.VC.db
+*.VC.VCproj.user
+*.VC.dbproj.user
+*.VC.Local.db
+*.csdef
+*.vbdef
+*.opensdf
+*.aspxdesigner.cache
+*.aspxdesigner.vb
+*.aspxdesigner.cs
+*.aspx.cs
+*.aspx.vb
+*.aspxsln
+*.resx
+
+
+# Build and output files
+**/obj/
+**/bin/
+**/Debug/
+**/Release/
+**/AnyCPU/
+**/x86/
+**/x64/
+
+# Test files
+**/TestResults/
+**/.testsettings
+
+# NuGet packages folder
+**/packages/
+
+# Temporary files
+*~
+*.tmp
+*.TMP
+
+# Settings & User Data
+*.config
+*.usersettings
+**.DotSettings.user
+*.Secret
+
+# Other IDE specific files
+.*.GlobalSettings
+
+# Ignore any local version control folders
+**/.git/
+
+# Ignore VS Code's settings and cache
+**/.vscode/
+
+# Ignore dotnet CLI's global tools folder
+**/.dotnet/tools/
