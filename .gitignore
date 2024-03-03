@@ -57,6 +57,7 @@
 
 # Ignore VS Code's settings and cache
 **/.vscode/
+.vs/
 
 # Ignore dotnet CLI's global tools folder
 **/.dotnet/tools/
