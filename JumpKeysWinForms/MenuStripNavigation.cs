@@ -1,37 +1,33 @@
 ﻿
+
 namespace JumpKeysWinForms
 {
-
-    public class JumpKeys
+    public class MenuStripNavigation : ControlNavigationBase
     {
-        private static Form _form;
-        private static Dictionary<Control, ControlNavigationBase> navigationMapping = new Dictionary<Control, ControlNavigationBase>();
+        private int _skipCount = 0;
+        private readonly Control _control;
+        private bool _registered = false;
 
-        public static MenuStripNavigation MenuStrip(MenuStrip menuStrip)
+        internal MenuStripNavigation(Control control)
         {
-            if (menuStrip == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            var menuStripNavigation = new MenuStripNavigation(menuStrip);
-
-            if (!navigationMapping.ContainsKey(menuStrip))
-            {
-                navigationMapping.Add(menuStrip, menuStripNavigation);
-                return menuStripNavigation;
-            }
-            else
-            {
-                throw new Exception("Navigation already exists for " + menuStrip.ToString());
-                // implement cleanup
-            }
+            _control = control;
         }
 
+        public override void Register()
+        {
+            _control.PreviewKeyDown += MenuItemHandlePreviewKeyDown;
+            _control.KeyDown += MenuItemHandleKeyDown;
+            _registered = true;
+        }
 
+        public MenuStripNavigation Skip(int skipCount)
+        {
+            if(skipCount >= 0)
+                _skipCount = skipCount;
+            return this;
+        }
 
-
-        internal static void MenuItemHandlePreviewKeyDown(object s, PreviewKeyDownEventArgs e)
+        internal void MenuItemHandlePreviewKeyDown(object s, PreviewKeyDownEventArgs e)
         {
             if (e.IsInputKey)
             {
@@ -52,10 +48,9 @@ namespace JumpKeysWinForms
             }
         }
 
-        internal static void MenuItemHandleKeyDown(object s, KeyEventArgs e)
+        internal void MenuItemHandleKeyDown(object s, KeyEventArgs e)
         {
             bool forward = e.Modifiers == Keys.None;
-            // MessageBox.Show("tab pressed");
             var menuStrip = s as MenuStrip;
             // System.Collections.IList listOfItems = menuStrip.Items;
             foreach (var item in menuStrip.Items)
@@ -75,7 +70,7 @@ namespace JumpKeysWinForms
                 {
                     if (forward)
                     {
-                        var nextItem = FindNextToolStripItem(menuStrip.Items, toolStripItem);
+                        var nextItem = findNextToolStripItem(menuStrip.Items, toolStripItem);
                         if (nextItem != null)
                         {
                             if (nextItem as ToolStripComboBox != null)
@@ -99,12 +94,18 @@ namespace JumpKeysWinForms
             e.SuppressKeyPress = true;
         }
 
-        private static ToolStripItem? FindNextToolStripItem(ToolStripItemCollection items, ToolStripItem item)
+        private ToolStripItem? findNextToolStripItem(ToolStripItemCollection items, ToolStripItem item)
         {
             var curIndex = items.IndexOf(item);
             while (curIndex < items.Count - 1)
             {
-                curIndex++;
+                curIndex += _skipCount+1;
+
+                //index overflow
+                if(curIndex > items.Count - 1)
+                {
+                    curIndex = items.Count - 1;
+                }
 
                 if (items[curIndex] as ToolStripComboBox != null)
                 {
@@ -123,24 +124,6 @@ namespace JumpKeysWinForms
             }
 
             return null;
-        }
-
-        public static void SetupForm(Form form)
-        {
-            _form = form;
-            // main form catches keystrokes before they reach any of child controls
-            form.KeyPreview = true;
-            hookKeyboardKeys();
-        }
-
-        public static void SayHello()
-        {
-            MessageBox.Show("Hello JumpKeys");
-        }
-
-        private static void hookKeyboardKeys()
-        {
-            return;
         }
     }
 }
