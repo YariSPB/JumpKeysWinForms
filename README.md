@@ -9,11 +9,13 @@ Download this C# Class Library and apply to your Winforms project.
 At form inititation, register navigation setup for Controls.
 JumpKeys uses builder pattern and extention methods to customize navigation behavior for a selected Control instances and its nested elements.
 For example:
+
 Registering Tab navigation for a MainStrip element, for each Item ("File", "Edit", "View", etc.), while skipping TextBoxes, if any, and only Tab first 3 Items and then jump to another control.
+
 JKSetup.ForMenuStrip(someMainStrip)
-        .SkipTextBox()
-        .SkipAfter(3)
-        .Register();
+.SkipTextBox()
+.SkipAfter(3)
+.Register();
 
 This is an open source project with a lot of work to be done. 
 Feel free to contribute and raise issues.
