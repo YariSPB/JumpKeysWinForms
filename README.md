@@ -1,20 +1,22 @@
 # JumpKeysWinForms
-JumpKeys is a .Net framework designed to improve keyboard navigation for Windows Forms .Net7 and above.
-Its goal is to make desktop applications more accessible for people unable to use mouse for UI navigation. 
-Also, for any user who prefers active use of keyboard. 
+JumpKeys is a .Net Library providing tools for customizable keyboard navigations for Windows Forms.
 
-It provides developers with ready to use and customizable navigation options for WinForms controls.
+Principles of accessible UI are laid out in this paper: https://www.linkedin.com/pulse/unlocking-web-all-building-accessible-online-yaroslav-paslavskiy-th9sf/?trackingId=8dHd3BNjS2qngC5px0a%2FKg%3D%3D
 
-Unlike default Tab implementation which bavigates at controls' level with TabIndex and TabOrder, 
-it provides ability to navigate inside controls between various elements. 
+The goal of the project is to improve UI accessibility for people preferring work with a keyboard. Also, a greater goal is to make it WCAG and 508 Compliant.
 
-Register JumpKeys navigations by single line of code after form construction:
+Download this C# Class Library and apply to your Winforms project.
+At form inititation, register navigation setup for Controls.
+JumpKeys uses builder pattern and extention methods to customize navigation behavior for a selected Control instances and its nested elements.
+For example:
+Registering Tab navigation for a MainStrip element, for each Item ("File", "Edit", "View", etc.), while skipping TextBoxes, if any, and only Tab first 3 Items and then jump to another control.
+JKSetup.ForMenuStrip(someMainStrip)
+        .SkipTextBox()
+        .SkipAfter(3)
+        .Register();
 
-1. Using JumpKeys
-2. NavigationBulder.Control(ControlName).Register();
-3. It's done.
-
-
+This is an open source project with a lot of work to be done. 
+Feel free to contribute and raise issues.
 
 
 
