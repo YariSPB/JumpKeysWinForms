@@ -1,9 +1,9 @@
 ﻿
-namespace JumpKeysWinForms
+namespace JumpKeys
 {
     public abstract class ControlNavigationBase
     {
-        internal ControlNavigationBase() { }
+        
 
         public abstract void Register();
     }
