@@ -1,6 +1,9 @@
 ﻿
 namespace JumpKeys
 {
+    /// <summary>
+    /// a class containing navigation methods and state for a MainStrip instance
+    /// </summary>
     public class MenuStripNavigation : ControlNavigationBase
     {
         private int _skipCount = 0;
@@ -13,6 +16,9 @@ namespace JumpKeys
 
         }
 
+        /// <summary>
+        /// Completes navigation setup for a control
+        /// </summary>
         public override void Register()
         {
             _control.PreviewKeyDown += MenuItemHandlePreviewKeyDown;
@@ -23,7 +29,7 @@ namespace JumpKeys
                 if (item as ToolStripComboBox != null)
                 {
                     var combo = (ToolStripComboBox)item;
-                    combo.ComboBox.PreviewKeyDown += ToolStripComboBoxHandlePreviewKeyDown;
+                    combo.ComboBox.PreviewKeyDown += MenuItemHandlePreviewKeyDown;
                     combo.ComboBox.KeyDown += ToolStripComboBoxHandleKeyDown;
                 }
             }
@@ -34,7 +40,7 @@ namespace JumpKeys
                 if (item as ToolStripTextBox != null)
                 {
                     var textBox = (ToolStripTextBox)item;
-                    textBox.TextBox.PreviewKeyDown += ToolStripTextBoxHandlePreviewKeyDown;
+                    textBox.TextBox.PreviewKeyDown += MenuItemHandlePreviewKeyDown;
                     textBox.TextBox.KeyDown += ToolStripTextBoxHandleKeyDown;
                 }
             }
@@ -79,19 +85,6 @@ namespace JumpKeys
             return null;
         }
 
-        private void ToolStripTextBoxHandlePreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
-        {
-            if (e.KeyCode == Keys.Tab)
-            {
-                //last item selected
-                if (e.Modifiers == Keys.None && _control.Items[_control.Items.Count - 1].Selected)
-                {
-                    return;
-                }
-
-                e.IsInputKey = true;
-            }
-        }
 
         public MenuStripNavigation Skip(int skipCount)
         {
@@ -100,13 +93,12 @@ namespace JumpKeys
             return this;
         }
 
-        internal void MenuItemHandlePreviewKeyDown(object s, PreviewKeyDownEventArgs e)
+        private void MenuItemHandlePreviewKeyDown(object s, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Tab)
             {
-                var menuStrip = s as MenuStrip;
                 //last item selected
-                if (e.Modifiers == Keys.None && menuStrip.Items[menuStrip.Items.Count - 1].Selected)
+                if (e.Modifiers == Keys.None && _control.Items[_control.Items.Count - 1].Selected)
                 {
                     return;
                 }
@@ -167,21 +159,6 @@ namespace JumpKeys
                 {
                     nextItem.Select();
                 }
-            }
-        }
-
-        internal void ToolStripComboBoxHandlePreviewKeyDown (object s, PreviewKeyDownEventArgs e)
-        {
-            if (e.KeyCode == Keys.Tab)
-            {
-                //last item selected
-                if (e.Modifiers == Keys.None && _control.Items[_control.Items.Count - 1].Selected)
-                {
-                    return;
-                }
-
-                // must check last item ???
-                e.IsInputKey = true;
             }
         }
 

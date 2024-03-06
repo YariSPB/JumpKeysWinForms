@@ -1,12 +1,20 @@
 ﻿
 namespace JumpKeys
 {
-
-    public class JKSetup
+    /// <summary>
+    /// A static class exposing all available keyboard navigation tools
+    /// </summary>
+    public static class JKSetup
     {
         //private static Form _form;
         private static Dictionary<Control, ControlNavigationBase> navigationMapping = new();
 
+        /// <summary>
+        /// Begin keyboard navigation setup for an instance of MenuStrip
+        /// </summary>
+        /// <param name="menuStrip">Instance of a control type</param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static MenuStripNavigation ForMenuStrip(MenuStrip menuStrip)
         {
             var menuStripNavigation = new MenuStripNavigation(menuStrip);
