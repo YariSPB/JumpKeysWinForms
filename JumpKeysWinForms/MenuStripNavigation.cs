@@ -6,8 +6,8 @@ namespace JumpKeys
     /// </summary>
     public class MenuStripNavigation : ControlNavigationBase
     {
-        private int _skipCount = 0;
         private bool skipComboBox;
+        private bool skipTextBox;
         private readonly MenuStrip _control;
         //private bool _registered = false;
 
@@ -87,24 +87,22 @@ namespace JumpKeys
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="skipCount"></param>
-        /// <returns></returns>
-        public MenuStripNavigation Skip(int skipCount)
-        {
-            if(skipCount >= 0)
-                _skipCount = skipCount;
-            return this;
-        }
-
-        /// <summary>
         /// Jump over comboboxes
         /// </summary>
         /// <returns></returns>
         public MenuStripNavigation SkipComboBox()
         {
             skipComboBox = true;
+            return this;
+        }
+
+        /// <summary>
+        /// Jump over textboxes
+        /// </summary>
+        /// <returns></returns>
+        public MenuStripNavigation SkipTextBox()
+        {
+            skipTextBox = true;
             return this;
         }
 
@@ -219,7 +217,7 @@ namespace JumpKeys
             var curIndex = items.IndexOf((ToolStripItem)item);
             while (curIndex < items.Count - 1)
             {
-                curIndex += _skipCount+1;
+                curIndex ++;
 
                 //index overflow
                 if(curIndex > items.Count - 1)
@@ -228,6 +226,11 @@ namespace JumpKeys
                 }
 
                 if ( skipComboBox == true && items[curIndex] as ToolStripComboBox != null) {
+                    continue;
+                }
+
+                if (skipTextBox == true && items[curIndex] as ToolStripTextBox != null)
+                {
                     continue;
                 }
 
