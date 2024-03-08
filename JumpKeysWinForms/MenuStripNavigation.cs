@@ -8,6 +8,7 @@ namespace JumpKeys
     {
         private bool skipComboBox;
         private bool skipTextBox;
+        private int jumpAfterCount = 0;
         private readonly MenuStrip _control;
         //private bool _registered = false;
 
@@ -106,12 +107,27 @@ namespace JumpKeys
             return this;
         }
 
+        /// <summary>
+        /// Jump to next control after navigating this number of items
+        /// </summary>
+        /// <param name="count">items count</param>
+        /// <returns></returns>
+        public MenuStripNavigation JumpAfterCount(int count)
+        {
+            if(count > 0) {
+                jumpAfterCount = count;
+            }
+            
+            return this;
+        }
+
         private void MenuItemHandlePreviewKeyDown(object s, PreviewKeyDownEventArgs e)
         {
             if (e.KeyCode == Keys.Tab)
             {
+                var itemCount = jumpAfterCount > 0 ? Math.Min(jumpAfterCount, _control.Items.Count) : _control.Items.Count;
                 //last item selected
-                if (e.Modifiers == Keys.None && _control.Items[_control.Items.Count - 1].Selected)
+                if (e.Modifiers == Keys.None && _control.Items[itemCount - 1].Selected)
                 {
                     return;
                 }
@@ -146,7 +162,11 @@ namespace JumpKeys
                     if (forward)
                     {
                         var nextItem = FindNextToolStripItem(menuStrip.Items, toolStripItem);
-                        SelectToolStripItem(nextItem);
+                        if(nextItem != null)
+                        {
+                            SelectToolStripItem(nextItem);
+                        }
+                 
                     }
 
                     break;
@@ -215,7 +235,8 @@ namespace JumpKeys
         private ToolStripItem FindNextToolStripItem(ToolStripItemCollection items, Object item)
         {
             var curIndex = items.IndexOf((ToolStripItem)item);
-            while (curIndex < items.Count - 1)
+            var itemCount = jumpAfterCount > 0 ? Math.Min(jumpAfterCount, items.Count) : items.Count;
+            while (curIndex < itemCount - 1)
             {
                 curIndex ++;
 
